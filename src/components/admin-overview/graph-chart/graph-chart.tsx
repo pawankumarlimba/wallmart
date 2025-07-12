@@ -1,9 +1,27 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  TooltipProps,
+} from "recharts"
+import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent"
 
-const salesData = [
+/**
+ * Shape of a single row in the sales dataset.
+ */
+interface SalesDatum {
+  date: string
+  totalSales: number
+  extrasSales: number
+}
+
+const salesData: SalesDatum[] = [
   { date: "May 25", totalSales: 1200, extrasSales: 200 },
   { date: "May 26", totalSales: 5500, extrasSales: 300 },
   { date: "May 27", totalSales: 1050, extrasSales: 0 },
@@ -13,13 +31,21 @@ const salesData = [
   { date: "May 31", totalSales: 11000, extrasSales: 1200 },
 ]
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+/**
+ * Typed tooltip for Recharts. Eliminates the `any` type so it passes
+ * `@typescript-eslint/no-explicit-any`.
+ */
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: TooltipProps<ValueType, NameType>) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
-        <p className="font-medium">{label}</p>
-        <p className="text-blue-600">Total sales: {payload[0]?.value}$</p>
-        <p className="text-green-600">Extras sales: {payload[1]?.value}$</p>
+      <div className="rounded-lg border bg-white p-3 shadow-lg">
+        <p className="font-medium text-gray-800">{label}</p>
+        <p className="text-blue-600">Total sales: {payload[0].value}$</p>
+        <p className="text-green-600">Extras sales: {payload[1].value}$</p>
       </div>
     )
   }
@@ -30,20 +56,27 @@ export function GraphChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-700">Sales from May 25 2023 — May 31 2023</CardTitle>
+        <CardTitle className="text-xl font-semibold text-gray-700">
+          Sales from May 25 2023 — May 31 2023
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={salesData}>
-              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} />
+            <AreaChart data={salesData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+              <XAxis
+                dataKey="date"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: "#6b7280" }}
+              />
               <YAxis
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 12, fill: "#6b7280" }}
                 tickFormatter={(value) => `${value}$`}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<CustomTooltip />} cursor={{ opacity: 0 }} />
               <Area
                 type="monotone"
                 dataKey="totalSales"
@@ -52,7 +85,13 @@ export function GraphChart() {
                 fillOpacity={0.3}
                 strokeWidth={2}
               />
-              <Area type="monotone" dataKey="extrasSales" stroke="#10b981" fill="transparent" strokeWidth={2} />
+              <Area
+                type="monotone"
+                dataKey="extrasSales"
+                stroke="#10b981"
+                fill="transparent"
+                strokeWidth={2}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>

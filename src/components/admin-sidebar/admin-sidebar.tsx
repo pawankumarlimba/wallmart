@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutGrid, FileText, Store, ClipboardList, FolderGit2, Users, UserSquare, Megaphone, Ticket, MessageSquare, Mail, Settings, HelpCircle, Menu, X } from 'lucide-react'
+import { LayoutGrid, Store, ClipboardList, MessageSquare, Mail, Settings, HelpCircle, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 

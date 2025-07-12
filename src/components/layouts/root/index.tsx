@@ -1,6 +1,5 @@
 import React, { Fragment, ReactNode } from "react";
-import Link from "next/link";
-import Image from "next/image";
+
 import Sidebar from "@/components/admin-sidebar/admin-sidebar";
 
 

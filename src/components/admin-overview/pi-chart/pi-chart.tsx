@@ -1,69 +1,120 @@
-"use client";
+"use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PieChart, Pie, Cell, LabelList } from "recharts"
+import { useMemo } from "react"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart"
 
-const data = [
-  { name: "2 nights", value: 25, color: "#fb923c" },
-  { name: "3 nights", value: 20, color: "#fbbf24" },
-  { name: "4-5 nights", value: 30, color: "#65a30d" },
-  { name: "8-14 nights", value: 25, color: "#0891b2" },
-];
+// Define the chart config and extract keys for safe indexing
+const chartConfig = {
+  perfect: {
+    label: "Perfect (On-time, complete, no damage)",
+    color: "#4ade80", // Green
+  },
+  late: {
+    label: "Late Delivery",
+    color: "#facc15", // Yellow
+  },
+  incomplete: {
+    label: "Incomplete",
+    color: "#60a5fa", // Blue
+  },
+  damaged: {
+    label: "Damaged",
+    color: "#f87171", // Red
+  },
+} as const
 
-const COLORS = data.map((d) => d.color);
+type CategoryKey = keyof typeof chartConfig
 
-export function PiChart({ className = "" }: { className?: string }) {
-  const chartData = useMemo(() => data, []);
+// Warehouse pie data
+const warehousePieData: Record<string, { category: CategoryKey; value: number }[]> = {
+  warehouse1: [
+    { category: "perfect", value: 910 },
+    { category: "late", value: 85 },
+    { category: "incomplete", value: 60 },
+    { category: "damaged", value: 45 },
+  ],
+  warehouse2: [
+    { category: "perfect", value: 780 },
+    { category: "late", value: 120 },
+    { category: "incomplete", value: 40 },
+    { category: "damaged", value: 25 },
+  ],
+  warehouse3: [
+    { category: "perfect", value: 850 },
+    { category: "late", value: 50 },
+    { category: "incomplete", value: 70 },
+    { category: "damaged", value: 30 },
+  ],
+}
+
+export function PiChart({
+  selectedWarehouseId,
+  className = "",
+}: {
+  selectedWarehouseId: string
+  className?: string
+}) {
+  const chartData = useMemo(() => {
+    return warehousePieData[selectedWarehouseId] ?? []
+  }, [selectedWarehouseId])
 
   return (
     <Card className={className + " w-full max-w-xl mx-auto"}>
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-800">
-          Stay duration summary
-        </CardTitle>
+        <CardTitle className="text-xl font-semibold text-gray-800">Perfect Order Rate</CardTitle>
       </CardHeader>
-
       <CardContent>
-        <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-10">
-          <div className="w-full max-w-[18rem] md:max-w-[22rem] lg:max-w-[26rem] aspect-square">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="45%"
-                  outerRadius="70%"
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {chartData.map((_entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3 md:block md:space-y-4">
-            {chartData.map((item, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <span
-                  className="inline-block w-4 h-4 rounded-full"
-                  style={{ backgroundColor: item.color }}
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-square min-h-[300px] [&_.recharts-wrapper]:pb-10 [&_.recharts-legend-wrapper]:inset-x-0"
+        >
+          <PieChart key={selectedWarehouseId}>
+            <ChartTooltip cursor={false} content={<ChartTooltipContent nameKey="category" />} />
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius="45%"
+              outerRadius="70%"
+              paddingAngle={2}
+              dataKey="value"
+              nameKey="category"
+              isAnimationActive={true}
+              animationDuration={500}
+            >
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={chartConfig[entry.category].color}
                 />
-                <span
-                  className="text-sm font-medium whitespace-nowrap"
-                  style={{ color: item.color }}
-                >
-                  {item.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+              <LabelList
+  dataKey="value"
+  position="outside"
+  className="fill-foreground text-xs"
+  formatter={(value: number, entry?: { payload?: { category?: CategoryKey } }) => {
+    const category = entry?.payload?.category;
+    const label = category ? chartConfig[category].label.split(" ")[0] : "Unknown";
+    return `${label}: ${value}`;
+  }}
+/>
+
+            </Pie>
+            <ChartLegend
+              content={<ChartLegendContent nameKey="category" />}
+              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+            />
+          </PieChart>
+        </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

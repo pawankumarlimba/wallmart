@@ -1,95 +1,87 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  Area,
-  AreaChart,
-  ResponsiveContainer,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
-  TooltipProps,
+  ResponsiveContainer,
+  CartesianGrid,
 } from "recharts"
-import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useMemo } from "react"
 
-/**
- * Shape of a single row in the sales dataset.
- */
-interface SalesDatum {
-  date: string
-  totalSales: number
-  extrasSales: number
+const deliveryDelayData: Record<string, { range: string; count: number }[]> = {
+  warehouse1: [
+    { range: "0-1 hrs", count: 50 },
+    { range: "1-3 hrs", count: 40 },
+    { range: "3-6 hrs", count: 25 },
+    { range: "6-12 hrs", count: 10 },
+    { range: "12+ hrs", count: 5 },
+  ],
+  warehouse2: [
+    { range: "0-1 hrs", count: 30 },
+    { range: "1-3 hrs", count: 50 },
+    { range: "3-6 hrs", count: 20 },
+    { range: "6-12 hrs", count: 15 },
+    { range: "12+ hrs", count: 10 },
+  ],
+  warehouse3: [
+    { range: "0-1 hrs", count: 40 },
+    { range: "1-3 hrs", count: 30 },
+    { range: "3-6 hrs", count: 15 },
+    { range: "6-12 hrs", count: 10 },
+    { range: "12+ hrs", count: 5 },
+  ],
 }
 
-const salesData: SalesDatum[] = [
-  { date: "May 25", totalSales: 1200, extrasSales: 200 },
-  { date: "May 26", totalSales: 5500, extrasSales: 300 },
-  { date: "May 27", totalSales: 1050, extrasSales: 0 },
-  { date: "May 28", totalSales: 7800, extrasSales: 150 },
-  { date: "May 29", totalSales: 4200, extrasSales: 250 },
-  { date: "May 30", totalSales: 2800, extrasSales: 400 },
-  { date: "May 31", totalSales: 11000, extrasSales: 1200 },
-]
+export function GraphChart({
+  selectedWarehouseId,
+}: {
+  selectedWarehouseId: string
+}) {
+  const chartData = useMemo(() => {
+    return deliveryDelayData[selectedWarehouseId] ?? []
+  }, [selectedWarehouseId])
 
-
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: TooltipProps<ValueType, NameType>) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border bg-white p-3 shadow-lg">
-        <p className="font-medium text-gray-800">{label}</p>
-        <p className="text-blue-600">Total sales: {payload[0].value}$</p>
-        <p className="text-green-600">Extras sales: {payload[1].value}$</p>
-      </div>
-    )
-  }
-  return null
-}
-
-export function GraphChart() {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-gray-700">
-          Sales from May 25 2023 — May 31 2023
+          Delivery Delay Distribution
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-80">
+        <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={salesData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 10, bottom: 5 }}
+              barCategoryGap={25}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis
-                dataKey="date"
-                axisLine={false}
+                dataKey="range"
                 tickLine={false}
+                axisLine={false}
                 tick={{ fontSize: 12, fill: "#6b7280" }}
               />
               <YAxis
-                axisLine={false}
+                allowDecimals={false}
                 tickLine={false}
+                axisLine={false}
                 tick={{ fontSize: 12, fill: "#6b7280" }}
-                tickFormatter={(value) => `${value}$`}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ opacity: 0 }} />
-              <Area
-                type="monotone"
-                dataKey="totalSales"
-                stroke="#6366f1"
-                fill="#6366f1"
-                fillOpacity={0.3}
-                strokeWidth={2}
+              <Tooltip
+                wrapperClassName="!text-sm"
+                contentStyle={{
+                  borderRadius: "0.5rem",
+                  fontSize: "0.85rem",
+                }}
               />
-              <Area
-                type="monotone"
-                dataKey="extrasSales"
-                stroke="#10b981"
-                fill="transparent"
-                strokeWidth={2}
-              />
-            </AreaChart>
+              <Bar dataKey="count" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

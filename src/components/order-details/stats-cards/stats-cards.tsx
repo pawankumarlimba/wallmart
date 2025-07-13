@@ -9,9 +9,9 @@ interface StatsCardsProps {
 
 export function StatsCards({ orders }: StatsCardsProps) {
   const totalOrders = orders.length
-  const deliveredOrders = orders.filter((item) => item.status === "delivered").length
-  const pendingOrders = orders.filter((item) => item.status === "pending").length
-  const shippedOrders = orders.filter((item) => item.status === "shipped").length
+  const deliveredOrders = orders.filter((item) => item.status === "Delivered").length
+  const pendingOrders = orders.filter((item) => item.status === "Pending").length
+  const shippedOrders = orders.filter((item) => item.status === "Shipped").length
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -3,13 +3,18 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutGrid, Store, ClipboardList, MessageSquare, Mail, Settings, HelpCircle, Menu, X } from 'lucide-react'
+import { LayoutGrid, Store, ClipboardList, MessageSquare, Mail, Menu, X, Power } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '../ui/button'
 
 interface NavItem {
   title: string
   href: string
+  icon: React.ElementType
+}
+interface NavItem1 {
+  title: string
   icon: React.ElementType
 }
 
@@ -24,15 +29,18 @@ const clientNavItems: NavItem[] = [
   { title: 'Newsletter', href: '/admin-newsletter', icon: Mail },
 ]
 
-const bottomNavItems: NavItem[] = [
-  { title: 'Settings', href: '/AdminSettings/AdminProfile', icon: Settings },
-  { title: 'Support', href: '/AdminSupport', icon: HelpCircle },
+const mainNavItemsbottom: NavItem1[] = [
+  { title: 'Logout', icon: Power },
+ 
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
+const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.replace('/');
+  };
   const NavLink = ({ item }: { item: NavItem }) => {
     const isActive = pathname === item.href
     const Icon = item.icon
@@ -97,10 +105,25 @@ export default function Sidebar() {
               </div>
             </div>
 
-            <div className="xl:fixed border-t xl:bottom-4 xl:left-0 xl:right-0 space-y-1 xl:px-4">
-              {bottomNavItems.map((item) => (
-                <NavLink key={item.href} item={item} />
-              ))}
+            <div className="xl:fixed  xl:bottom-4 xl:left-0 xl:right-0 space-y-1 xl:px-4">
+             {mainNavItemsbottom.map(({ title, icon: Icon }) => {
+ 
+
+          return (
+            <Button
+            onClick={handleLogout}
+              key={title}
+              className={cn(
+                'flex bg-reansparent text-start text-black lg:w-[166px] items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all',
+                'hover:bg-[#707FDD]/20 hover:text-[#707FDD]',
+              
+              )}
+            >
+              <Icon className="h-6 w-6" />
+              <span className="hidden lg:block">{title}</span>
+            </Button>
+          )
+        })}
             </div>
           </nav>
         </div>

@@ -1,3 +1,4 @@
+"use client"
 import Overview from "@/components/admin-overview/admin-overview";
 
 

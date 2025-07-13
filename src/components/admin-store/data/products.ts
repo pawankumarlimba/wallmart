@@ -1,59 +1,71 @@
-import type { StaticImageData } from "next/image"
 
 export interface Product {
-  id: string
+  sku: string
   name: string
-  stock: number
-  price: number
+  stockKeepingUnit: string
+  price: {
+    amount: number
+    currency: string
+  }
   salesPercentage: number
-  image: string | StaticImageData
-  status: "In Stock" | "Low Stock" | "Out of Stock"
+  images: string[]
 }
 
 export const products: Product[] = [
   {
-    id: "PROD001",
+    sku: "PROD001",
     name: "Wireless Earbuds",
-    stock: 150,
-    price: 79.99,
+    stockKeepingUnit: "0",
+    price: {
+      amount: 79.99,
+      currency: "USD",
+    },
     salesPercentage: 12.5,
-    image: "/placeholder.svg?height=64&width=64",
-    status: "In Stock",
+    images: ["/placeholder.svg?height=64&width=64"],
   },
   {
-    id: "PROD002",
+    sku: "PROD002",
     name: "Smartwatch",
-    stock: 80,
-    price: 199.99,
+    stockKeepingUnit: "2",
+    price: {
+      amount: 199.99,
+      currency: "USD",
+    },
     salesPercentage: 8.2,
-    image: "/placeholder.svg?height=64&width=64",
-    status: "In Stock",
+    images: ["/placeholder.svg?height=64&width=64"],
   },
   {
-    id: "PROD003",
+    sku: "3000",
     name: "Portable Bluetooth Speaker",
-    stock: 200,
-    price: 49.99,
+    stockKeepingUnit: "3",
+    price: {
+      amount: 49.99,
+      currency: "USD",
+    },
     salesPercentage: 15.0,
-    image: "/placeholder.svg?height=64&width=64",
-    status: "In Stock",
+    images: ["/placeholder.svg?height=64&width=64"],
   },
   {
-    id: "PROD004",
+    sku: "40",
     name: "USB-C Hub",
-    stock: 10, // Changed to demonstrate 'Low Stock'
-    price: 29.99,
+    stockKeepingUnit: "PROD004",
+    price: {
+      amount: 29.99,
+      currency: "USD",
+    },
     salesPercentage: 5.1,
-    image: "/placeholder.svg?height=64&width=64",
-    status: "Low Stock",
+    images: ["/placeholder.svg?height=64&width=64"],
   },
   {
-    id: "PROD005",
+    sku: "50",
     name: "Gaming Mouse",
-    stock: 0, // Changed to demonstrate 'Out of Stock'
-    price: 59.99,
+    stockKeepingUnit: "PROD005",
+    price: {
+      amount: 59.99,
+      currency: "USD",
+    },
     salesPercentage: 9.8,
-    image: "/placeholder.svg?height=64&width=64",
-    status: "Out of Stock",
+    images: ["/placeholder.svg?height=64&width=64"],
   },
 ]
+

@@ -5,7 +5,7 @@ type RequestType = "All" | "Feature Request" | "Bug Report" | "Idea" | "Archive"
 
 
 interface RequestData {
-  id: number; // Ensure there's an ID for each item
+  id: number; 
   name: string;
   messageCount: number;
   feedback: string;
@@ -13,8 +13,8 @@ interface RequestData {
   type: RequestType;
   likes: number;
   dislikes: number;
-  isChecked: boolean; // For checkbox state
-  onCheckboxChange?: (id: number) => void; // Optional function to handle checkbox change
+  isChecked: boolean; 
+  onCheckboxChange?: (id: number) => void; 
 }
 
 const RequestItem = ({

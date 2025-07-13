@@ -9,7 +9,11 @@ interface SummaryCardsProps {
 
 export function SummaryCards({ products }: SummaryCardsProps) {
   const totalProducts = products.length
-  const totalStockValue = products.reduce((sum, product) => sum + product.stock * product.price, 0)
+ const totalStockValue = products.reduce(
+  (sum, product) => sum + Number(product.stockKeepingUnit) * product.price.amount,
+  0
+);
+
   const averageSalesPercentage = products.reduce((sum, product) => sum + product.salesPercentage, 0) / totalProducts
 
   return (

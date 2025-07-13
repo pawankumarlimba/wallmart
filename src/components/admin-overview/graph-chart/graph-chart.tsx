@@ -31,10 +31,7 @@ const salesData: SalesDatum[] = [
   { date: "May 31", totalSales: 11000, extrasSales: 1200 },
 ]
 
-/**
- * Typed tooltip for Recharts. Eliminates the `any` type so it passes
- * `@typescript-eslint/no-explicit-any`.
- */
+
 const CustomTooltip = ({
   active,
   payload,

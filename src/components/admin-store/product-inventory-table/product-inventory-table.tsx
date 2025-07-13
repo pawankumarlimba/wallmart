@@ -15,7 +15,6 @@ import { TrendingUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Product } from "../data/products"
 
-
 interface ProductInventoryTableProps {
   products: Product[]
 }
@@ -40,51 +39,58 @@ export function ProductInventoryTable({ products }: ProductInventoryTableProps) 
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell className="hidden sm:table-cell">
-                  <Image
-                    alt="Product image"
-                    className="aspect-square rounded-md object-cover"
-                    height="64"
-                    src={product.image || "/placeholder.svg"}
-                    width="64"
-                  />
-                </TableCell>
-                <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell>{product.stock}</TableCell>
-                <TableCell className="hidden md:table-cell">${product.price.toFixed(2)}</TableCell>
-                <TableCell className="hidden md:table-cell">{product.salesPercentage.toFixed(1)}%</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  <Badge
-                    variant={
-                      product.status === "In Stock"
-                        ? "default"
-                        : product.status === "Low Stock"
-                          ? "destructive"
-                          : "outline"
-                    }
-                  >
-                    {product.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <TrendingUp className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
+            {products.map((product) => {
+              const stock = Number(product.stockKeepingUnit)
+              const status =
+                stock === 0 ? "Out of Stock" : stock <= 30 ? "Low Stock" : "In Stock"
+
+              const variant =
+                status === "In Stock"
+                  ? "default"
+                  : status === "Low Stock"
+                  ? "destructive"
+                  : "outline"
+
+              return (
+                <TableRow key={product.sku}>
+                  <TableCell className="hidden sm:table-cell">
+                    <Image
+                      alt="Product image"
+                      className="aspect-square rounded-md object-cover"
+                      height="64"
+                      width="64"
+                      src={product.images[0] || "/placeholder.svg"}
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>{product.stockKeepingUnit}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    ${product.price.amount.toFixed(2)} {product.price.currency}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {product.salesPercentage.toFixed(1)}%
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Badge variant={variant}>{status}</Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button aria-haspopup="true" size="icon" variant="ghost">
+                          <TrendingUp className="h-4 w-4" />
+                          <span className="sr-only">Toggle menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </CardContent>

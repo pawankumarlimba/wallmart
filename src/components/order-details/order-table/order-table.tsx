@@ -17,7 +17,6 @@ export function OrderTable({ orders }: OrderTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead>Order ID</TableHead>
-            <TableHead>Product</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Order Date</TableHead>
@@ -30,13 +29,8 @@ export function OrderTable({ orders }: OrderTableProps) {
         <TableBody>
           {orders.length > 0 ? (
             orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-medium">{order.id}</TableCell>
-                <TableCell>
-                  <div>
-                    <div className="font-medium">{order.productName}</div>
-                  </div>
-                </TableCell>
+              <TableRow key={order.OrderId}>
+                <TableCell className="font-medium">{order.OrderId}</TableCell>
                 <TableCell>
                   <div>
                     <div className="font-medium">{order.customer}</div>
@@ -46,12 +40,12 @@ export function OrderTable({ orders }: OrderTableProps) {
                 <TableCell>
                   <StatusBadge status={order.status} />
                 </TableCell>
-                <TableCell>{order.orderDate}</TableCell>
-                <TableCell>{order.deliveryDate}</TableCell>
-                <TableCell className="font-medium">{order.amount}</TableCell>
+                <TableCell>{order.orderDate.toLocaleDateString()}</TableCell>
+                <TableCell>{order.deliveryDate?.toLocaleDateString()}</TableCell>
+                <TableCell className="font-medium">{order.totalAmount}</TableCell>
                 <TableCell>
-                  {order.trackingNumber !== "-" ? (
-                    <code className="text-xs bg-gray-100 px-2 py-1 rounded">{order.trackingNumber}</code>
+                  {order.customerId !== "-" ? (
+                    <code className="text-xs bg-gray-100 px-2 py-1 rounded">{order.customerId}</code>
                   ) : (
                     <span className="text-gray-400">-</span>
                   )}

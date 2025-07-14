@@ -44,6 +44,8 @@ Your tasks include:
    - "How many SKUs do we have?"
    - "Total forecasted sales for this month?"
    - "Show me forecast summary per warehouse."
+   -"what is the highest selling product?"
+   -"what is the lowest selling product?"
 
 4. **Response Format**
 Always respond in a clean, structured format:

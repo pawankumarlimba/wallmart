@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutGrid, Store, ClipboardList, MessageSquare, Mail, Menu, X, Power } from 'lucide-react'
+import { LayoutGrid, Store, ClipboardList, MessageSquare, Mail, Menu, X, Power, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '../ui/button'
@@ -22,6 +22,7 @@ const mainNavItems: NavItem[] = [
   { title: 'Overview', href: '/', icon: LayoutGrid },
   { title: 'Store', href: '/admin-store', icon: Store },
   { title: 'Orders', href: '/order-details', icon: ClipboardList },
+  { title: 'Alerts', href: '/alert', icon: AlertTriangle },
 ]
 
 const clientNavItems: NavItem[] = [

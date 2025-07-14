@@ -41,23 +41,23 @@ export function OrderTabs({ orders, activeTab, onTabChange }: OrderTabsProps) {
             <Package className="w-4 h-4" />
             All ({orders.length})
           </TabsTrigger>
-          <TabsTrigger value="pending" className="flex items-center gap-2">
+          <TabsTrigger value="Pending" className="flex items-center gap-2">
             <Clock className="w-4 h-4" />
             Pending ({orders.filter((item) => item.status === "Pending").length})
           </TabsTrigger>
-          <TabsTrigger value="delivered" className="flex items-center gap-2">
+          <TabsTrigger value="Delivered" className="flex items-center gap-2">
             <CheckCircle className="w-4 h-4" />
             Delivered ({orders.filter((item) => item.status === "Delivered").length})
           </TabsTrigger>
-          <TabsTrigger value="processing" className="flex items-center gap-2">
+          <TabsTrigger value="Processing" className="flex items-center gap-2">
             <Package className="w-4 h-4" />
             Processing ({orders.filter((item) => item.status === "Processing").length})
           </TabsTrigger>
-          <TabsTrigger value="shipped" className="flex items-center gap-2">
+          <TabsTrigger value="Shipped" className="flex items-center gap-2">
             <Truck className="w-4 h-4" />
             Shipped ({orders.filter((item) => item.status === "Shipped").length})
           </TabsTrigger>
-          <TabsTrigger value="cancelled" className="flex items-center gap-2">
+          <TabsTrigger value="Cancelled" className="flex items-center gap-2">
             <XCircle className="w-4 h-4" />
             Cancelled ({orders.filter((item) => item.status === "Cancelled").length})
           </TabsTrigger>
